@@ -1,4 +1,8 @@
 {
+    "name": "your-vendor-name/your-package-name",
+    "description": "A brief description of your package",
+    "license": "proprietary",
+    "type": "project",
     "require": {
         "vlucas/phpdotenv": "^2.4"
     },
