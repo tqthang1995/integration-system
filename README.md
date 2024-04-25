@@ -1,7 +1,7 @@
-PHP Admin Dashboard
+PHP Integration-system
 
 Introduction
-This PHP Admin Dashboard project provides a web-based administration interface for managing users. It allows administrators to perform CRUD (Create, Read, Update, Delete) operations on user data. The dashboard is designed to be intuitive and user-friendly, making it easy for administrators to manage users efficiently.
+This PHP Integration-system project provides a web-based administration interface for managing users. It allows administrators to perform CRUD (Create, Read, Update, Delete) operations on user data. The dashboard is designed to be intuitive and user-friendly, making it easy for administrators to manage users efficiently.
 
 Features
 User Management: Add, view, edit, and delete user accounts.
@@ -18,11 +18,11 @@ Installation
 Clone the repository to your local machine:
 bash
 Copy code
-git clone https://github.com/your-username/php-admin-dashboard.git
+git clone https://github.com/tqthang1995/integration-system.gitd.git
 Navigate to the project directory:
 bash
 Copy code
-cd php-admin-dashboard
+cd integration-system
 Install dependencies using Composer:
 bash
 Copy code
