@@ -15,7 +15,6 @@ class IntegrationSystemController extends BaseController {
     {
         // Extract the request path
         $prefix = strtok($_SERVER["REQUEST_URI"], '?'); 
-        echo "IntegrationSystemController process";
         if ($prefix === '/crawl') {
             // Retrieve the URL from the query parameters
             $url = $_GET['url'] ?? null;
