@@ -8,3 +8,4 @@ $dotenv = new DotEnv(__DIR__);
 $dotenv->load();
 
 $dbConnection = (new DatabaseConnector())->getConnection();
+// echo '<script>console.log('.json_encode($dbConnection).')</scrip>';

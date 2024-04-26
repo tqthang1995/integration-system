@@ -12,6 +12,7 @@ class UsersGateway {
 
     public function findAll()
     {
+
         $statement = "
             SELECT 
                 id, first_name, last_name, user_name, email, pwd
@@ -22,6 +23,7 @@ class UsersGateway {
         try {
             $statement = $this->db->query($statement);
             $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
             return $result;
         } catch (\PDOException $e) {
             exit($e->getMessage());
