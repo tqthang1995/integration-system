@@ -1,5 +1,7 @@
 <?php
-use Src\Controller\UsersController;
+use Src\Controllers\IntegrationSystemController;
+use Src\Controllers\UsersController;
+use Src\Controllers\BaseController;
 require "../bootstrap.php";
 // $dbSeedFilePath = "../dbseed.php";
 
@@ -33,7 +35,16 @@ if (isset($uri[2])) {
 }
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
+$prefix = strtok($_SERVER["REQUEST_URI"], '?');
+// Instantiate the base controller
+$baseController = new BaseController($dbConnection, $requestMethod);
 
-// pass the request method and user ID to the UsersController and process the HTTP request:
-$controller = new UsersController($dbConnection, $requestMethod, $userId);
-$controller->processRequest();
+// Instantiate the appropriate controller based on the request URI
+if ($prefix === '/users' || strpos($prefix, '/users/') === 0 || $prefix === '/login') {
+    $controller = new UsersController($dbConnection, $requestMethod, $userId);
+    $controller->processRequest();
+
+} elseif ($prefix === '/crawl') {
+    $controller = new IntegrationSystemController($dbConnection, $requestMethod);
+    $controller->processRequest();
+} 
