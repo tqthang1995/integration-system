@@ -15,25 +15,16 @@ class IntegrationSystemController extends BaseController {
     {
         // Extract the request path
         $prefix = strtok($_SERVER["REQUEST_URI"], '?'); 
+        echo "IntegrationSystemController process";
+        if ($prefix === '/crawl') {
+            // Retrieve the URL from the query parameters
+            $url = $_GET['url'] ?? null;
 
-        switch ($this->requestMethod) {
-            case 'GET':
-                if ($prefix === '/crawl') {
-                    // Retrieve the URL from the query parameters
-                    $url = $_GET['url'] ?? null;
-
-                    // Process the request based on the provided URL
-                    $response = $this->getAllContentByUrl($url);
-                } else {
-                    // Handle unsupported endpoints
-                    $response = $this->notFoundResponse();
-                }
-               break;
-            // Handle other request methods (POST, PUT, DELETE) if needed
-            default:
-                // Handle unsupported request methods
-                $response = $this->notFoundResponse();
-                break;
+            // Process the request based on the provided URL
+            $response = $this->getAllContentByUrl($url);
+        } else {
+            // Handle unsupported endpoints
+            $response = $this->notFoundResponse();
         }
 
         // Ensure $response is defined in all cases

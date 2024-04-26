@@ -1,82 +1,70 @@
 <?php
 namespace Src\Controllers;
-
 use Src\TableGateways\UsersGateway;
 
 class UsersController extends BaseController {
+
     private $userId;
+
     private $usersGateway;
 
-    public function __construct($db, $requestMethod, $userId) {
+    public function __construct($db, $requestMethod, $userId)
+    {
         parent::__construct($db, $requestMethod);
+
         $this->userId = $userId;
         $this->usersGateway = new UsersGateway($db);
     }
 
-    public function processRequest() {
+    public function processRequest()
+    {
         $prefix = strtok($_SERVER["REQUEST_URI"], '?');
 
         switch ($this->requestMethod) {
             case 'GET':
-                // echo "$prefix";
-                $response = $this->handleGetRequest($prefix);
+                if ($prefix === '/users' || strpos($prefix, '/users/') === 0) {
+                    if ($this->userId) {
+                        $response = $this->getUser($this->userId);
+                    } else {
+                        $response = $this->getAllUsers();
+                    }
+                } elseif ($prefix === '/login') {
+                    $username = $_GET['username'] ?? null;
+                    $password = $_GET['password'] ?? null;
+                    $response = $this->login($username, $password);
+                } else {
+                    $response = $this->notFoundResponse();
+                }
                 break;
             case 'POST':
-                $response = $this->handlePostRequest($prefix);
+                if ($prefix === '/users') {
+                    $response = $this->createUserFromRequest();
+                } else {
+                    $response = $this->notFoundResponse();
+                }
                 break;
             case 'PUT':
-                $response = $this->handlePutRequest($prefix);
+                if ($prefix === '/users') {
+                    $response = $this->updateUserFromRequest($this->userId);
+                } else {
+                    $response = $this->notFoundResponse();
+                }
                 break;
             case 'DELETE':
-                $response = $this->handleDeleteRequest($prefix);
+                if (strpos($prefix, '/users/') === 0) {
+                    $response = $this->deleteUser($this->userId);
+                } else {
+                    $response = $this->notFoundResponse();
+                }
                 break;
             default:
                 $response = $this->notFoundResponse();
                 break;
         }
 
-        $this->sendResponse($response);
-    }
-
-    private function handleGetRequest($prefix) {
-        switch ($prefix) {
-            case '/users':
-                $response = $this->getAllUsers();
-                break;
-            case '/user':
-                $response = $this->getUser();
-                break;
-            case '/login':
-                $response = $this->login();
-                break;
-            default:
-                $response = $this->notFoundResponse();
-                break;
-        }
-        return $response;
-    }
-
-    private function handlePostRequest($prefix) {
-        if ($prefix === '/users') {
-            return $this->createUserFromRequest();
-        } else {
-            return $this->notFoundResponse();
-        }
-    }
-
-    private function handlePutRequest($prefix) {
-        if ($prefix === '/users') {
-            return $this->updateUserFromRequest();
-        } else {
-            return $this->notFoundResponse();
-        }
-    }
-
-    private function handleDeleteRequest($prefix) {
-        if ($prefix === '/users') {
-            return $this->deleteUser();
-        } else {
-            return $this->notFoundResponse();
+        header($response['status_code_header']);
+        if ($response['body']) {
+            echo $response['body'];
         }
     }
 

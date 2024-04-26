@@ -13,9 +13,6 @@ class DatabaseConnector {
         $user = getenv('DB_USERNAME');
         $pass = getenv('DB_PASSWORD');
 
-        $dsn = "mysql:host=$host;port=$port;charset=utf8mb4;dbname=$db";
-        echo"$dsn";
-
         try {
             $this->dbConnection = new \PDO(
                 "mysql:host=$host;port=$port;charset=utf8mb4;dbname=$db",

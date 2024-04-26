@@ -1,10 +1,9 @@
 <?php
-
-use Src\Controllers\BaseController;
 use Src\Controllers\IntegrationSystemController;
 use Src\Controllers\UsersController;
-
+use Src\Controllers\BaseController;
 require "../bootstrap.php";
+// $dbSeedFilePath = "../dbseed.php";
 
 // Set headers for CORS
 header("Access-Control-Allow-Origin: *");
@@ -25,17 +24,16 @@ if (isset($uri[2])) {
 
 // Determine request method
 $requestMethod = $_SERVER["REQUEST_METHOD"];
-
-// Example: Output the PDO object's DSN
-// echo '<script>console.log('.json_encode($dbConnection).')</script>';
-
+$prefix = strtok($_SERVER["REQUEST_URI"], '?');
 // Instantiate the base controller
 $baseController = new BaseController($dbConnection, $requestMethod);
 
-// Instantiate UsersController for user-related requests
-$usersController = new UsersController($dbConnection, $requestMethod, $userId);
-$usersController->processRequest();
+// Instantiate the appropriate controller based on the request URI
+if ($prefix === '/users' || strpos($prefix, '/users/') === 0 || $prefix === '/login') {
+    $controller = new UsersController($dbConnection, $requestMethod, $userId);
+    $controller->processRequest();
 
-// Instantiate IntegrationSystemController for integration system-related requests
-$integrationSystemController = new IntegrationSystemController($dbConnection, $requestMethod);
-$integrationSystemController->processRequest();
+} elseif ($prefix === '/crawl') {
+    $controller = new IntegrationSystemController($dbConnection, $requestMethod);
+    $controller->processRequest();
+} 
